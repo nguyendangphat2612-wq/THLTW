@@ -264,7 +264,7 @@ export default function AdminStoreManager({ section }) {
     <main className="admin-shell">
       <header className="admin-topbar">
         <Link href="/admin" className="admin-brand"><span className="admin-brand-mark" aria-hidden="true">▦</span><span>LocPhat Admin</span></Link>
-        <div className="admin-account"><Link href="/me">{admin.name}</Link><button type="button" onClick={logout} aria-label="Đăng xuất">↪</button></div>
+        <div className="admin-account"><Link href="/admin" title="Tài khoản quản trị">{admin.name}</Link><button type="button" onClick={logout} aria-label="Đăng xuất">↪</button></div>
       </header>
       <div className="admin-contextbar">
         <h1>{definition.title}</h1>
@@ -274,7 +274,7 @@ export default function AdminStoreManager({ section }) {
         <aside className="admin-sidebar" aria-label="Các mục quản trị">
           <div className="admin-side-group"><p>TỔNG QUAN</p><Link href="/admin" className="admin-side-link">Bảng tổng hợp</Link></div>
           <div className="admin-side-group"><p>QUẢN LÝ CATALOG</p><Link href="/admin/category" className="admin-side-link">Danh mục</Link><Link href="/admin/brand" className="admin-side-link">Thương hiệu</Link><Link href="/admin/product" className="admin-side-link">Sản phẩm</Link></div>
-          <div className="admin-side-group"><p>VẬN HÀNH</p><Link href="/admin/promotions" className={`admin-side-link ${section === "promotions" ? "is-active" : ""}`}>Khuyến mãi</Link><Link href="/admin/members" className={`admin-side-link ${section === "members" ? "is-active" : ""}`}>Thành viên</Link><Link href="/admin/inventory" className={`admin-side-link ${section === "inventory" ? "is-active" : ""}`}>Kho hàng</Link><Link href="/admin/cart" className="admin-side-link">Đơn hàng</Link></div>
+          <div className="admin-side-group"><p>VẬN HÀNH</p><Link href="/admin/promotions" className={`admin-side-link ${section === "promotions" ? "is-active" : ""}`}>Khuyến mãi</Link><Link href="/admin/members" className={`admin-side-link ${section === "members" ? "is-active" : ""}`}>Thành viên</Link><Link href="/admin/inventory" className={`admin-side-link ${section === "inventory" ? "is-active" : ""}`}>Kho hàng</Link><Link href="/admin/order" className="admin-side-link">Đơn hàng</Link></div>
           <div className="admin-side-group"><p>NỘI DUNG</p><Link href="/admin/contact" className="admin-side-link">Liên hệ</Link><Link href="/admin/article" className="admin-side-link">Bài viết</Link></div>
           <div className="admin-side-account"><span className="admin-avatar" aria-hidden="true">{admin.name?.slice(0, 1)?.toUpperCase() || "A"}</span><span><strong>{admin.name}</strong><small>{admin.email}</small></span></div>
         </aside>

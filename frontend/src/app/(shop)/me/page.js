@@ -108,10 +108,6 @@ export default function MePage() {
           <label className="grid gap-2 text-sm font-medium">Địa chỉ nhận hàng mặc định
             <textarea maxLength={1000} rows={3} value={user?.address || ""} onChange={(event) => setUser((previous) => ({ ...previous, address: event.target.value }))} className="border border-slate-300 p-3" />
           </label>
-          <div className="rounded-xl bg-slate-50 p-4">
-            <p className="text-sm text-slate-500">Vai trò</p>
-            <p className="mt-1 font-medium capitalize">{user?.role}</p>
-          </div>
           <button type="submit" disabled={saving} className="min-h-11 w-fit rounded-xl bg-teal-800 px-5 font-semibold text-white disabled:opacity-60">{saving ? "Đang lưu..." : "Lưu thông tin"}</button>
         </form>
 

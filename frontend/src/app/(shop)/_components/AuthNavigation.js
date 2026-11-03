@@ -24,8 +24,8 @@ export default function AuthNavigation() {
 
       const cachedUser = getStoredUser();
       if (mounted) {
-        setUser(cachedUser);
-        setIsAuthenticated(true);
+        setUser(cachedUser?.role === "user" ? cachedUser : null);
+        setIsAuthenticated(cachedUser?.role === "user");
       }
 
       try {
@@ -35,8 +35,8 @@ export default function AuthNavigation() {
           setIsAuthenticated(true);
         }
       } catch (error) {
-        if (error.status === 401) {
-          clearStoredToken();
+        if (error.status === 401 || error.status === 403) {
+          clearStoredToken("customer");
           if (mounted) {
             setUser(null);
             setIsAuthenticated(false);

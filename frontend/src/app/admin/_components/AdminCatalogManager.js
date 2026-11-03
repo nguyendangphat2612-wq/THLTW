@@ -184,7 +184,7 @@ export default function AdminCatalogManager({ resourceType }) {
           <Link href="/admin?tab=products">Sản phẩm</Link>
         </nav>
         <div className="admin-account">
-          <Link href="/me" title="Thông tin tài khoản">{user?.name}</Link>
+          <Link href="/admin" title="Tài khoản quản trị">{user?.name}</Link>
           <button type="button" onClick={handleLogout} title="Đăng xuất" aria-label="Đăng xuất">↪</button>
         </div>
       </header>

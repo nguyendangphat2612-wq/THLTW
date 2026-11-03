@@ -33,7 +33,7 @@ export default function RegisterPage() {
         body: JSON.stringify(form),
       });
 
-      setStoredToken(data.token, data.user);
+      setStoredToken(data.token, data.user, "customer");
       router.push("/me");
     } catch (err) {
       setError(getAuthErrorMessage(err, "Không thể tạo tài khoản."));

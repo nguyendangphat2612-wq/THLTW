@@ -331,7 +331,7 @@ export default function AdminResourceManager({ resourceType, initialTrash = fals
       <header className="admin-topbar">
         <Link href="/admin" className="admin-brand"><span className="admin-brand-mark" aria-hidden="true">▦</span><span>LocPhat Admin</span></Link>
         <div className="admin-account">
-          <Link href="/me" title="Thông tin tài khoản">{user.name}</Link>
+          <Link href="/admin" title="Tài khoản quản trị">{user.name}</Link>
           <button type="button" onClick={handleLogout} title="Đăng xuất" aria-label="Đăng xuất">↪</button>
         </div>
       </header>
@@ -356,7 +356,7 @@ export default function AdminResourceManager({ resourceType, initialTrash = fals
           <div className="admin-side-group"><p>QUẢN LÝ CỬA HÀNG</p><Link href="/admin/promotions" className="admin-side-link">Khuyến mãi</Link><Link href="/admin/members" className="admin-side-link">Thành viên</Link><Link href="/admin/inventory" className="admin-side-link">Kho hàng</Link></div>
           <div className="admin-side-group">
             <p>ĐƠN HÀNG & NỘI DUNG</p>
-            <Link href="/admin/cart" className="admin-side-link">Giỏ hàng / Đơn hàng</Link>
+            <Link href="/admin/order" className="admin-side-link">Giỏ hàng / Đơn hàng</Link>
             <Link href="/admin/contact" className="admin-side-link">Liên hệ</Link>
             <Link href="/admin/article" className="admin-side-link">Bài viết</Link>
           </div>
@@ -365,7 +365,7 @@ export default function AdminResourceManager({ resourceType, initialTrash = fals
             <Link href="/admin/category/trash" className={`admin-side-link ${resourceType === "categories" && trash ? "is-active" : ""}`}><span aria-hidden="true">▧</span> Danh mục</Link>
             <Link href="/admin/brand/trash" className={`admin-side-link ${resourceType === "brands" && trash ? "is-active" : ""}`}><span aria-hidden="true">▧</span> Thương hiệu</Link>
             <Link href="/admin/product/trash" className={`admin-side-link ${resourceType === "products" && trash ? "is-active" : ""}`}><span aria-hidden="true">▧</span> Sản phẩm</Link>
-            <Link href="/admin/cart/trash" className="admin-side-link">Giỏ hàng / Đơn hàng</Link>
+            <Link href="/admin/order/trash" className="admin-side-link">Giỏ hàng / Đơn hàng</Link>
             <Link href="/admin/contact/trash" className="admin-side-link">Liên hệ</Link>
             <Link href="/admin/article/trash" className="admin-side-link">Bài viết</Link>
           </div>

@@ -36,6 +36,21 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        return $this->authenticate($request);
+    }
+
+    public function loginCustomer(Request $request)
+    {
+        return $this->authenticate($request, 'user');
+    }
+
+    public function loginAdmin(Request $request)
+    {
+        return $this->authenticate($request, 'admin');
+    }
+
+    private function authenticate(Request $request, ?string $requiredRole = null)
+    {
         $validated = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
@@ -46,6 +61,15 @@ class AuthController extends Controller
         if (! $user || ! Hash::check($validated['password'], $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }
+        if ($requiredRole !== null && $user->role !== $requiredRole) {
+            throw ValidationException::withMessages([
+                'email' => [
+                    $requiredRole === 'admin'
+                        ? 'Tài khoản này không thuộc khu vực quản trị.'
+                        : 'Tài khoản quản trị vui lòng đăng nhập tại trang dành cho admin.',
+                ],
             ]);
         }
         if ($user->is_locked) {

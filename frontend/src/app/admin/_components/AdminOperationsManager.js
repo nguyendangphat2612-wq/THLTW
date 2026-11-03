@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiRequest, clearStoredToken, getStoredToken } from "@/lib/api";
 
@@ -17,7 +17,7 @@ const definitions = {
     label: "Giỏ hàng / Đơn hàng",
     singular: "đơn hàng",
     base: "/api/admin/orders",
-    route: "/admin/cart",
+    route: "/admin/order",
     empty: { customer_name: "", email: "", phone: "", address: "", status: "pending", items: [] },
   },
   articles: {
@@ -96,6 +96,7 @@ export default function AdminOperationsManager({ resourceType, initialTrash = fa
   const [form, setForm] = useState(definition.empty);
   const [editingId, setEditingId] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const orderDetailsRef = useRef(null);
   const [statusDraft, setStatusDraft] = useState("");
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [cancellingOrder, setCancellingOrder] = useState(false);
@@ -105,6 +106,12 @@ export default function AdminOperationsManager({ resourceType, initialTrash = fa
   const [saving, setSaving] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (selectedOrder) {
+      orderDetailsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [selectedOrder]);
 
   const loadRecords = useCallback(async () => {
     const params = new URLSearchParams({ per_page: "100", trash: initialTrash ? "1" : "0" });
@@ -319,7 +326,7 @@ export default function AdminOperationsManager({ resourceType, initialTrash = fa
     <main className="admin-shell">
       <header className="admin-topbar">
         <Link href="/admin" className="admin-brand"><span className="admin-brand-mark" aria-hidden="true">▦</span><span>LocPhat Admin</span></Link>
-        <div className="admin-account"><Link href="/me">{user.name}</Link><button type="button" onClick={handleLogout} aria-label="Đăng xuất">↪</button></div>
+        <div className="admin-account"><Link href="/admin" title="Tài khoản quản trị">{user.name}</Link><button type="button" onClick={handleLogout} aria-label="Đăng xuất">↪</button></div>
       </header>
       <div className="admin-contextbar">
         <h1>{title}</h1>
@@ -337,7 +344,7 @@ export default function AdminOperationsManager({ resourceType, initialTrash = fa
             <Link href="/admin/product" className="admin-side-link">Sản phẩm</Link>
           </div>
           <div className="admin-side-group"><p>ĐƠN HÀNG & NỘI DUNG</p>
-            <Link href="/admin/cart" className={`admin-side-link ${resourceType === "orders" && !initialTrash ? "is-active" : ""}`}>Giỏ hàng / Đơn hàng</Link>
+            <Link href="/admin/order" className={`admin-side-link ${resourceType === "orders" && !initialTrash ? "is-active" : ""}`}>Giỏ hàng / Đơn hàng</Link>
             <Link href="/admin/contact" className={`admin-side-link ${resourceType === "contacts" && !initialTrash ? "is-active" : ""}`}>Liên hệ</Link>
             <Link href="/admin/article" className={`admin-side-link ${resourceType === "articles" && !initialTrash ? "is-active" : ""}`}>Bài viết</Link>
           </div>
@@ -347,7 +354,7 @@ export default function AdminOperationsManager({ resourceType, initialTrash = fa
             <Link href="/admin/inventory" className="admin-side-link">Kho hàng</Link>
           </div>
           <div className="admin-side-group admin-side-trash-group"><p>THÙNG RÁC</p>
-            <Link href="/admin/cart/trash" className={`admin-side-link ${resourceType === "orders" && initialTrash ? "is-active" : ""}`}>Giỏ hàng / Đơn hàng</Link>
+            <Link href="/admin/order/trash" className={`admin-side-link ${resourceType === "orders" && initialTrash ? "is-active" : ""}`}>Giỏ hàng / Đơn hàng</Link>
             <Link href="/admin/contact/trash" className={`admin-side-link ${resourceType === "contacts" && initialTrash ? "is-active" : ""}`}>Liên hệ</Link>
             <Link href="/admin/article/trash" className={`admin-side-link ${resourceType === "articles" && initialTrash ? "is-active" : ""}`}>Bài viết</Link>
           </div>
@@ -449,7 +456,7 @@ export default function AdminOperationsManager({ resourceType, initialTrash = fa
             )}
           </div>
           {resourceType === "orders" && selectedOrder ? (
-            <section className="admin-panel mt-6" aria-label={`Chi tiết đơn hàng ${selectedOrder.id}`}>
+            <section ref={orderDetailsRef} className="admin-panel mt-6 scroll-mt-6" aria-label={`Chi tiết đơn hàng ${selectedOrder.id}`}>
               <div className="admin-panel-heading">
                 <div><p className="admin-eyebrow">CHI TIẾT ĐƠN HÀNG</p><h2>Đơn #{selectedOrder.id} · {selectedOrder.customer_name}</h2><p>{selectedOrder.created_at ? new Date(selectedOrder.created_at).toLocaleString("vi-VN") : ""}</p></div>
                 <button type="button" className="admin-cancel-button" onClick={() => setSelectedOrder(null)}>Đóng</button>

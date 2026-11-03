@@ -60,7 +60,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## MySQL database and authentication
 
-The backend uses Laravel migrations to create the `users` table, including unique email addresses, hashed passwords, roles, and API tokens. Registration at `POST /api/register` inserts each account into this table; login checks the saved password hash and issues a token that is also stored there.
+The backend uses Laravel migrations to create the `users` table, including unique email addresses, hashed passwords, roles, and API tokens. Registration at `POST /api/register` always creates a customer account (`role=user`), even if a client submits an extra role field. Customer and administrator sign-in use separate endpoints: `POST /api/login/customer` accepts only customer accounts, and `POST /api/login/admin` accepts only administrator accounts. A failed attempt at the wrong sign-in page does not issue or rotate an account token. The generic `POST /api/login` remains available for existing API clients; protected API routes still enforce administrator authorization.
 
 For a new MySQL/MariaDB database, either import [`docs/phaloc.sql`](../docs/phaloc.sql) in a SQL client, or configure `DB_*` in `.env` and run:
 
@@ -79,9 +79,9 @@ php artisan migrate --seed
 php artisan serve
 ```
 
-Import `postman/PhatLoc-API.postman_collection.json` into Postman and run the collection in order. In local/testing, registered and logging-in accounts receive the admin role so the admin workflow can be tested. In production, registration remains a regular user and must never grant admin automatically. `DatabaseSeeder` can also create `admin@example.com` with password `password123` in local/testing; override `ADMIN_EMAIL`, `ADMIN_NAME`, and `ADMIN_PASSWORD`. Never use the sample password in a deployed environment.
+Import `postman/PhatLoc-API.postman_collection.json` into Postman and run the collection in order. Customer registration and login never grant administrator access, including in local/testing. `DatabaseSeeder` creates a separate local/testing administrator account using `ADMIN_EMAIL`, `ADMIN_NAME`, and `ADMIN_PASSWORD`; set these values in the backend environment before seeding and do not use development credentials in a deployed environment.
 
-Register and login are public. Send the returned token as `Authorization: Bearer <token>` to view `/api/me`, logout, or access `/api/admin`. Catalog list endpoints are public; create, update, and delete require an admin token. List endpoints accept `page` and `per_page` (default 15, maximum 100).
+Registration and the customer/administrator login endpoints are public. Send the returned token as `Authorization: Bearer <token>` to view `/api/me`, logout, or access `/api/admin`. Catalog list endpoints are public; create, update, and delete require an admin token. List endpoints accept `page` and `per_page` (default 15, maximum 100).
 
 `GET /api/products` also supports `category_id`, `brand_id`, and `search`; `GET /api/brands` supports `category_id` and `search`. Invalid filter values return a JSON validation error.
 

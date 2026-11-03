@@ -18,6 +18,7 @@ class AuthApiTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
+            'role' => 'admin',
         ]);
 
         $registerResponse
@@ -47,7 +48,7 @@ class AuthApiTest extends TestCase
             ->assertJsonStructure(['token', 'user']);
     }
 
-    public function test_authenticated_user_can_view_profile_and_admin_route(): void
+    public function test_admin_can_access_admin_route_but_not_customer_profile(): void
     {
         $user = User::factory()->create([
             'name' => 'Admin User',
@@ -57,9 +58,7 @@ class AuthApiTest extends TestCase
 
         $this->withHeader('Authorization', 'Bearer '.$user->api_token)
             ->getJson('/api/me')
-            ->assertOk()
-            ->assertJsonPath('data.name', 'Admin User')
-            ->assertJsonPath('data.email', 'admin@example.com');
+            ->assertForbidden();
 
         $this->withHeader('Authorization', 'Bearer '.$user->api_token)
             ->getJson('/api/admin')
@@ -112,6 +111,32 @@ class AuthApiTest extends TestCase
         $this->withHeader('Authorization', 'Bearer '.$user->api_token)
             ->postJson('/api/categories', ['cat_name' => 'Blocked category'])
             ->assertForbidden();
+
+        $this->withHeader('Authorization', 'Bearer '.$user->api_token)
+            ->getJson('/api/orders')
+            ->assertOk();
+    }
+
+    public function test_admin_accounts_cannot_access_customer_profile_or_order_routes(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $headers = ['Authorization' => 'Bearer '.$admin->api_token];
+
+        $this->getJson('/api/me', $headers)->assertForbidden();
+        $this->putJson('/api/me', [
+            'name' => 'Changed Admin Name',
+            'phone' => '0900000000',
+            'address' => 'Customer address',
+        ], $headers)->assertForbidden();
+        $this->getJson('/api/orders', $headers)->assertForbidden();
+        $this->getJson('/api/admin', $headers)->assertOk();
+
+        $this->assertDatabaseHas('users', [
+            'id' => $admin->id,
+            'name' => $admin->name,
+            'phone' => null,
+            'address' => null,
+        ]);
     }
 
     public function test_logout_revokes_the_bearer_token(): void
@@ -157,6 +182,49 @@ class AuthApiTest extends TestCase
         $this->withHeader('Authorization', 'Bearer '.$oldToken)
             ->getJson('/api/me')
             ->assertUnauthorized();
+    }
+
+    public function test_customer_and_admin_login_are_separated_and_wrong_portal_does_not_rotate_token(): void
+    {
+        $customer = User::factory()->create([
+            'email' => 'portal-customer@example.com',
+            'password' => 'password123',
+            'role' => 'user',
+        ]);
+        $admin = User::factory()->create([
+            'email' => 'portal-admin@example.com',
+            'password' => 'password123',
+            'role' => 'admin',
+        ]);
+        $customerToken = $customer->api_token;
+        $adminToken = $admin->api_token;
+
+        $this->postJson('/api/login/admin', [
+            'email' => $customer->email,
+            'password' => 'password123',
+        ])->assertUnprocessable()
+            ->assertJsonValidationErrors(['email']);
+
+        $this->postJson('/api/login/customer', [
+            'email' => $admin->email,
+            'password' => 'password123',
+        ])->assertUnprocessable()
+            ->assertJsonValidationErrors(['email']);
+
+        $this->assertDatabaseHas('users', ['id' => $customer->id, 'api_token' => $customerToken]);
+        $this->assertDatabaseHas('users', ['id' => $admin->id, 'api_token' => $adminToken]);
+
+        $this->postJson('/api/login/customer', [
+            'email' => $customer->email,
+            'password' => 'password123',
+        ])->assertOk()
+            ->assertJsonPath('user.role', 'user');
+
+        $this->postJson('/api/login/admin', [
+            'email' => $admin->email,
+            'password' => 'password123',
+        ])->assertOk()
+            ->assertJsonPath('user.role', 'admin');
     }
 
     public function test_locked_accounts_cannot_log_in(): void

@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\AuthenticateApiToken;
 use App\Http\Middleware\EnsureAdminRole;
+use App\Http\Middleware\EnsureCustomerRole;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'api.token' => AuthenticateApiToken::class,
             'api.admin' => EnsureAdminRole::class,
+            'api.customer' => EnsureCustomerRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

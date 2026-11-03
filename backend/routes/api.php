@@ -24,12 +24,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login/customer', [AuthController::class, 'loginCustomer']);
+Route::post('/login/admin', [AuthController::class, 'loginAdmin']);
 
 Route::middleware('api.token')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/admin', [AdminController::class, 'show'])->middleware('api.admin');
+});
+
+Route::middleware(['api.token', 'api.customer'])->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::put('/me', [AuthController::class, 'updateProfile']);
-    Route::get('/admin', [AdminController::class, 'show'])->middleware('api.admin');
 });
 
 // ===============================
@@ -67,7 +72,7 @@ Route::get('/articles', [ArticleController::class, 'index']);
 Route::get('/articles/{slug}', [ArticleController::class, 'show']);
 Route::get('/product-images/{path}', [ProductController::class, 'image'])->where('path', '.*');
 
-Route::middleware('api.token')->group(function () {
+Route::middleware(['api.token', 'api.customer'])->group(function () {
     Route::get('/orders', [OrderController::class, 'customerIndex']);
     Route::get('/orders/{order}', [OrderController::class, 'customerShow']);
     Route::post('/orders/{order}/cancel', [OrderController::class, 'customerCancel']);

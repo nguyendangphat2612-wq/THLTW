@@ -23,7 +23,7 @@ export default function LoginForm({ isAdmin = false }) {
     setError("");
 
     try {
-      const data = await apiRequest("/api/login", {
+      const data = await apiRequest(isAdmin ? "/api/login/admin" : "/api/login/customer", {
         method: "POST",
         body: JSON.stringify(form),
       });
@@ -38,7 +38,7 @@ export default function LoginForm({ isAdmin = false }) {
         return;
       }
 
-      setStoredToken(data.token, data.user);
+      setStoredToken(data.token, data.user, isAdmin ? "admin" : "customer");
 
       if (isAdmin) {
         const requestedPath = new URLSearchParams(window.location.search).get("redirect");
