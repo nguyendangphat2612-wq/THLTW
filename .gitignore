@@ -1,0 +1,83 @@
+# === Chung ===
+*.log
+.env
+.env.backup
+.env.production
+/node_modules
+
+# === Backend (Laravel) ===
+.phpactor.json
+.phpunit.result.cache
+/backend/.fleet
+/backend/.idea
+/backend/.nova
+/backend/.phpunit.cache
+/backend/.vscode
+/backend/.zed
+/backend/auth.json
+/backend/node_modules
+/backend/public/build
+/backend/public/hot
+/backend/public/storage
+/backend/storage/*.key
+/backend/storage/pail
+/backend/vendor
+Homestead.json
+Homestead.yaml
+
+# Laravel sinh ra lúc chạy. Bình thường được che bởi các .gitignore lồng trong
+# backend/, nhưng những file đó chỉ tồn tại trên branch đã có commit backend.
+# Khai báo lại ở đây để không lộ ra khi checkout sang branch khác.
+/backend/bootstrap/cache/*
+!/backend/bootstrap/cache/.gitignore
+/backend/database/*.sqlite*
+/backend/storage/app/private/*
+!/backend/storage/app/private/.gitignore
+/backend/storage/app/public/*
+!/backend/storage/app/public/.gitignore
+/backend/storage/framework/cache/*
+!/backend/storage/framework/cache/.gitignore
+/backend/storage/framework/sessions/*
+!/backend/storage/framework/sessions/.gitignore
+/backend/storage/framework/testing/*
+!/backend/storage/framework/testing/.gitignore
+/backend/storage/framework/views/*
+!/backend/storage/framework/views/.gitignore
+/backend/storage/logs/*
+!/backend/storage/logs/.gitignore
+/backend/storage/framework/compiled.php
+/backend/storage/framework/config.php
+/backend/storage/framework/down
+/backend/storage/framework/maintenance.php
+/backend/storage/framework/routes.php
+/backend/storage/framework/services.json
+
+# === Frontend ===
+/frontend/node_modules
+/frontend/dist
+/frontend/build
+/frontend/.next
+/frontend/.nuxt
+/frontend/.vite
+/frontend/coverage
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.*.local
+/frontend/npm-debug.log*
+/frontend/yarn-error.log*
+/frontend/pnpm-debug.log*
+
+# === IDE / Editor ===
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# === Hệ điều hành ===
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cache

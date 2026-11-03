@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 320" fill="none">
+  <defs>
+    <linearGradient id="back" x1="80" y1="38" x2="174" y2="276" gradientUnits="userSpaceOnUse"><stop stop-color="#f2e7ee"/><stop offset=".55" stop-color="#cbb7d5"/><stop offset="1" stop-color="#8f87b5"/></linearGradient>
+    <linearGradient id="screen" x1="190" y1="45" x2="283" y2="273" gradientUnits="userSpaceOnUse"><stop stop-color="#f8d7e8"/><stop offset=".5" stop-color="#b6a0db"/><stop offset="1" stop-color="#7286bd"/></linearGradient>
+  </defs>
+  <ellipse cx="184" cy="280" rx="105" ry="12" fill="#756b8e" fill-opacity=".16"/>
+  <rect x="78" y="39" width="100" height="232" rx="23" fill="url(#back)" stroke="#e8dce9" stroke-width="2"/>
+  <rect x="91" y="52" width="43" height="91" rx="20" fill="#e6d8e6" fill-opacity=".8" stroke="#f8f1f5" stroke-width="2"/>
+  <circle cx="112" cy="76" r="11" fill="#161821" stroke="#d9cbdc" stroke-width="3"/><circle cx="112" cy="107" r="9" fill="#161821" stroke="#d9cbdc" stroke-width="3"/>
+  <circle cx="112" cy="129" r="5" fill="#fff2c7"/>
+  <rect x="187" y="44" width="98" height="232" rx="24" fill="#20202a" stroke="#14151d" stroke-width="3"/>
+  <rect x="193" y="50" width="86" height="220" rx="20" fill="url(#screen)"/>
+  <path d="M193 214c33-23 52-59 63-109 6-27 14-42 23-54v158c-25 29-54 44-86 45z" fill="#fff" fill-opacity=".18"/>
+  <circle cx="236" cy="57" r="4" fill="#20202a"/>
+</svg>
